@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Detective Game - Step 2</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 18px;
+            line-height: 1.6;
+            background-color: #000;
+            color: #fff;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: #ffff00;
+            text-align: center;
+            font-size: 28px;
+        }
+        
+        .game-container {
+            background-color: #222;
+            padding: 30px;
+            border-radius: 10px;
+            border: 3px solid #ffff00;
+            margin: 20px 0;
+        }        
+        .instructions {
+            background-color: #003366;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border: 2px solid #00ccff;
+        }
+        
+        .game-input {
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        input[type="number"] {
+            font-size: 24px;
+            padding: 15px;
+            width: 120px;
+            text-align: center;
+            border: 3px solid #00ccff;
+            border-radius: 5px;
+            background-color: #fff;
+            color: #000;
+        }
+        
+        button {
+            font-size: 20px;
+            padding: 15px 30px;
+            margin: 10px;
+            border: 3px solid #00ff00;
+            border-radius: 5px;
+            background-color: #00ff00;
+            color: #000;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background-color: #00cc00;
+        }
+        
+        button:focus {
+            outline: 3px solid #ffff00;
+        }        
+        #result {
+            margin: 20px 0;
+            padding: 20px;
+            border: 2px solid #ffff00;
+            border-radius: 5px;
+            background-color: #333;
+            min-height: 60px;
+            text-align: center;
+            font-size: 20px;
+            color: #ffff00;
+        }
+    </style>
+</head>
+<body>
+    <h1>🕵️ Number Detective Game 🔍</h1>
+    
+    <div class="game-container">
+        <div class="instructions">
+            <h2>How to Play:</h2>
+            <p>I'm thinking of a secret number between 1 and 10!</p>
+            <p>Can you guess what it is? I'll give you clues to help you!</p>
+            <p>Let's see how good a detective you are! 🔍</p>
+        </div>
+        
+        <div class="game-input">
+            <label for="guess">Enter your guess (1-10):</label><br><br>
+            <input type="number" id="guess" min="1" max="10" placeholder="?"><br><br>
+            <button id="submitGuess">Make My Guess! 🔍</button>
+        </div>
+        
+        <div id="result">
+            Ready for your first guess!
+        </div>
+    </div>
+
+    <script>
+        // This is JavaScript! Let's learn by doing!
+        
+        // VARIABLES - These store information for our game
+        let secretNumber = 7; // Our secret number (we'll make this random later!)
+        
+        // FUNCTIONS - These are reusable blocks of code
+        function checkGuess() {
+            console.log("Someone clicked the button!"); // This shows in browser's console
+            
+            // Get the player's guess from the input field
+            let playerGuess = document.getElementById('guess').value;
+            
+            // Get the result area so we can show messages
+            let resultArea = document.getElementById('result');
+            
+            // For now, let's just show what they guessed
+            resultArea.innerText = "You guessed: " + playerGuess + "! (We'll add game logic next!)";
+        }
+        
+        // EVENT LISTENER - This connects our button to our function
+        document.getElementById('submitGuess').addEventListener('click', checkGuess);
+        
+        // Let's also work when someone presses Enter in the input field
+        document.getElementById('guess').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                checkGuess();
+            }
+        });
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Detective Game - Final Complete Version</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 18px;
+            line-height: 1.6;
+            background-color: #000;
+            color: #fff;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: #ffff00;
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #00ccff;
+            font-style: italic;
+            margin-bottom: 30px;
+        }
+        
+        .game-container {
+            background-color: #222;
+            padding: 30px;
+            border-radius: 10px;
+            border: 3px solid #ffff00;
+            margin: 20px 0;
+        }
+        
+        .instructions {
+            background-color: #003366;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border: 2px solid #00ccff;
+        }
+        
+        .game-input {
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        input[type="number"], select {
+            font-size: 24px;
+            padding: 15px;
+            width: 120px;
+            text-align: center;
+            border: 3px solid #00ccff;
+            border-radius: 5px;
+            background-color: #fff;
+            color: #000;
+        }
+        
+        select {
+            width: 150px;
+        }
+        
+        button {
+            font-size: 20px;
+            padding: 15px 30px;
+            margin: 10px;
+            border: 3px solid #00ff00;
+            border-radius: 5px;
+            background-color: #00ff00;
+            color: #000;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background-color: #00cc00;
+        }
+        
+        button:focus {
+            outline: 3px solid #ffff00;
+        }
+        
+        button.secondary {
+            background-color: #ffff00;
+            border-color: #ffff00;
+        }
+        
+        button.secondary:hover {
+            background-color: #cccc00;
+        }
+        
+        #result {
+            margin: 20px 0;
+            padding: 20px;
+            border: 2px solid #ffff00;
+            border-radius: 5px;
+            background-color: #333;
+            min-height: 60px;
+            text-align: center;
+            font-size: 20px;
+            color: #ffff00;
+        }
+        
+        .correct {
+            background-color: #003300 !important;
+            border-color: #00ff00 !important;
+            color: #00ff00 !important;
+        }
+        
+        .too-high {
+            background-color: #330000 !important;
+            border-color: #ff6666 !important;
+            color: #ff6666 !important;
+        }
+        
+        .too-low {
+            background-color: #000033 !important;
+            border-color: #6666ff !important;
+            color: #6666ff !important;
+        }
+        
+        .audio-controls {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #444;
+            border-radius: 5px;
+            border: 2px solid #ffff00;
+        }
+        
+        .difficulty-controls {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #444;
+            border-radius: 5px;
+            border: 2px solid #00ccff;
+        }
+        
+        .stats {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #444;
+            border-radius: 5px;
+            color: #00ccff;
+        }
+        
+        .game-history {
+            text-align: left;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #333;
+            border-radius: 5px;
+            border: 2px solid #666;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .credits {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #444;
+            border-radius: 5px;
+            color: #ccc;
+            font-size: 14px;
+        }
+        
+        .keyboard-shortcuts {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #333;
+            border-radius: 5px;
+            border: 2px solid #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🕵️ Number Detective Game 🔍</h1>
+    <div class="subtitle">Built with JavaScript - A Programming Adventure!</div>
+    
+    <div class="game-container">
+        <div class="instructions">
+            <h2>How to Play:</h2>
+            <p>I'm thinking of a secret number! Can you guess what it is?</p>
+            <p>🔊 Turn on your sound - the game will talk to you! 🔊</p>
+            <p>Choose your difficulty level and start detecting! 🔍</p>
+        </div>
+        
+        <div class="difficulty-controls">
+            <h3>🎯 Choose Difficulty:</h3>
+            <label for="difficulty">Number Range:</label>
+            <select id="difficulty">
+                <option value="10">Easy (1-10)</option>
+                <option value="20">Medium (1-20)</option>
+                <option value="50">Hard (1-50)</option>
+                <option value="100">Expert (1-100)</option>
+            </select>
+            <button onclick="changeDifficulty()" class="secondary">Update Range</button>
+        </div>
+        
+        <div class="audio-controls">
+            <h3>🔊 Audio Settings:</h3>
+            <button id="testAudio" class="secondary">Test Audio 🔊</button>
+            <button id="muteToggle" class="secondary">🔇 Mute/Unmute</button>
+            <br><br>
+            <label for="speechRate">Speech Speed:</label>
+            <input type="range" id="speechRate" min="0.5" max="2" step="0.1" value="1">
+        </div>
+        
+        <div class="game-input">
+            <label for="guess" id="guessLabel">Enter your guess (1-10):</label><br><br>
+            <input type="number" id="guess" min="1" max="10" placeholder="?"><br><br>
+            <button id="submitGuess">Make My Guess! 🔍</button>
+            <button id="newGame" class="secondary">New Game 🎮</button>
+            <button id="giveHint" class="secondary">Give Me a Hint! 💡</button>
+        </div>
+        
+        <div class="stats">
+            <div id="gameStats">Guesses: 0 | Games Won: 0 | Best Score: --</div>
+            <div id="difficultyDisplay">Current Range: 1-10 (Easy)</div>
+        </div>
+        
+        <div id="result">
+            Ready for your first guess! The game will speak to you too!
+        </div>
+        
+        <div class="game-history">
+            <h4>📜 Game History:</h4>
+            <div id="historyList">No games played yet!</div>
+        </div>
+        
+        <div class="keyboard-shortcuts">
+            <h4>⌨️ Keyboard Shortcuts:</h4>
+            <p><strong>Enter:</strong> Make guess | <strong>Ctrl+N:</strong> New game | <strong>Ctrl+M:</strong> Mute/Unmute | <strong>Ctrl+H:</strong> Hint</p>
+        </div>
+    </div>
+    
+    <div class="credits">
+        <h3>🎓 What You Learned:</h3>
+        <p><strong>Variables:</strong> Storing data like secretNumber and guessCount<br>
+        <strong>Functions:</strong> Reusable code blocks like checkGuess() and speak()<br>
+        <strong>Conditionals:</strong> Making decisions with if/else statements<br>
+        <strong>Events:</strong> Responding to button clicks and keyboard presses<br>
+        <strong>APIs:</strong> Using browser features like speech synthesis</p>
+        
+        <p><em>Created at MyVision Oxfordshire | Keep exploring programming! 🚀</em></p>
+    </div>
+
+    <script>
+        // GAME STATE VARIABLES
+        let difficulty = 10;
+        let secretNumber = Math.floor(Math.random() * difficulty) + 1;
+        let guessCount = 0;
+        let gamesWon = 0;
+        let bestScore = null;
+        let audioEnabled = true;
+        let speechRate = 1;
+        let gameHistory = [];
+        let hintsUsed = 0;
+        
+        // SPEECH SYNTHESIS
+        const synth = window.speechSynthesis;
+        
+        console.log("Secret number is: " + secretNumber);
+        
+        // AUDIO FUNCTIONS
+        function speak(text, options = {}) {
+            if (!audioEnabled) return;
+            
+            synth.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.rate = speechRate;
+            utterance.pitch = options.pitch || 1;
+            utterance.volume = options.volume || 0.8;
+            synth.speak(utterance);
+        }
+        
+        function playSuccessSound() {
+            if (!audioEnabled) return;
+            
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            // Happy melody
+            oscillator.frequency.setValueAtTime(523, audioContext.currentTime);
+            oscillator.frequency.setValueAtTime(659, audioContext.currentTime + 0.2);
+            oscillator.frequency.setValueAtTime(784, audioContext.currentTime + 0.4);
+            
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.6);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.6);
+        }
+        
+        function playHintSound(isHigh) {
+            if (!audioEnabled) return;
+            
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = isHigh ? 800 : 300;
+            gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.3);
+        }
+        
+        // GAME FUNCTIONS
+        function updateStats() {
+            const bestScoreText = bestScore ? bestScore : "--";
+            document.getElementById('gameStats').innerText = 
+                `Guesses: ${guessCount} | Games Won: ${gamesWon} | Best Score: ${bestScoreText}`;
+        }
+        
+        function updateDifficultyDisplay() {
+            let difficultyName = "Easy";
+            if (difficulty === 20) difficultyName = "Medium";
+            else if (difficulty === 50) difficultyName = "Hard";
+            else if (difficulty === 100) difficultyName = "Expert";
+            
+            document.getElementById('difficultyDisplay').innerText = 
+                `Current Range: 1-${difficulty} (${difficultyName})`;
+        }
+        
+        function updateGameHistory() {
+            const historyList = document.getElementById('historyList');
+            if (gameHistory.length === 0) {
+                historyList.innerHTML = "No games played yet!";
+                return;
+            }
+            
+            historyList.innerHTML = gameHistory.slice(-5).reverse().map(game => 
+                `Game ${game.gameNumber}: ${game.result} in ${game.guesses} guesses (Range: 1-${game.difficulty})`
+            ).join('<br>');
+        }
+        
+        function changeDifficulty() {
+            const newDifficulty = parseInt(document.getElementById('difficulty').value);
+            difficulty = newDifficulty;
+            
+            // Update input constraints
+            document.getElementById('guess').max = difficulty;
+            document.getElementById('guessLabel').innerText = `Enter your guess (1-${difficulty}):`;
+            
+            updateDifficultyDisplay();
+            startNewGame();
+            
+            let difficultyName = "Easy";
+            if (difficulty === 20) difficultyName = "Medium";
+            else if (difficulty === 50) difficultyName = "Hard";
+            else if (difficulty === 100) difficultyName = "Expert";
+            
+            speak(`Difficulty changed to ${difficultyName}. New number range is 1 to ${difficulty}. Starting new game!`);
+        }
+        
+        function giveHint() {
+            if (guessCount === 0) {
+                speak("Make your first guess, then I can give you a hint!");
+                return;
+            }
+            
+            hintsUsed++;
+            let hint = "";
+            
+            // Different types of hints
+            if (hintsUsed % 3 === 1) {
+                // Even/odd hint
+                hint = secretNumber % 2 === 0 ? 
+                    `Hint: The secret number is EVEN!` : 
+                    `Hint: The secret number is ODD!`;
+            } else if (hintsUsed % 3 === 2) {
+                // Range hint
+                const mid = Math.floor(difficulty / 2);
+                hint = secretNumber <= mid ? 
+                    `Hint: The secret number is in the LOWER half (1-${mid})!` : 
+                    `Hint: The secret number is in the UPPER half (${mid + 1}-${difficulty})!`;
+            } else {
+                // Divisibility hint
+                const factors = [3, 5, 7];
+                const factor = factors[Math.floor(Math.random() * factors.length)];
+                hint = secretNumber % factor === 0 ? 
+                    `Hint: The secret number is divisible by ${factor}!` : 
+                    `Hint: The secret number is NOT divisible by ${factor}!`;
+            }
+            
+            document.getElementById('result').innerText = hint;
+            speak(hint);
+        }
+        
+        function checkGuess() {
+            let playerGuess = parseInt(document.getElementById('guess').value);
+            
+            if (isNaN(playerGuess) || playerGuess < 1 || playerGuess > difficulty) {
+                const message = `Please enter a number between 1 and ${difficulty}!`;
+                document.getElementById('result').innerText = message;
+                speak(message);
+                return;
+            }
+            
+            let resultArea = document.getElementById('result');
+            guessCount++;
+            updateStats();
+            
+            if (playerGuess === secretNumber) {
+                // WIN!
+                const message = `🎉 AMAZING! You found it! The number was ${secretNumber}! You did it in ${guessCount} guesses! 🎉`;
+                resultArea.innerText = message;
+                resultArea.className = "correct";
+                
+                // Update best score
+                if (!bestScore || guessCount < bestScore) {
+                    bestScore = guessCount;
+                    speak(`Fantastic! New best score! You got it in just ${guessCount} guesses!`, {pitch: 1.3});
+                } else {
+                    speak(`Excellent detective work! You solved it in ${guessCount} guesses!`, {pitch: 1.2});
+                }
+                
+                playSuccessSound();
+                gamesWon++;
+                
+                // Add to history
+                gameHistory.push({
+                    gameNumber: gameHistory.length + 1,
+                    result: "WON",
+                    guesses: guessCount,
+                    difficulty: difficulty
+                });
+                
+                updateStats();
+                updateGameHistory();
+                
+            } else if (playerGuess < secretNumber) {
+                const message = `📈 Too low! The secret number is HIGHER than ${playerGuess}. Try a bigger number!`;
+                resultArea.innerText = message;
+                resultArea.className = "too-low";
+                speak(`Too low! Try a number higher than ${playerGuess}`);
+                playHintSound(false);
+                
+            } else if (playerGuess > secretNumber) {
+                const message = `📉 Too high! The secret number is LOWER than ${playerGuess}. Try a smaller number!`;
+                resultArea.innerText = message;
+                resultArea.className = "too-high";
+                speak(`Too high! Try a number lower than ${playerGuess}`);
+                playHintSound(true);
+            }
+            
+            document.getElementById('guess').value = '';
+            document.getElementById('guess').focus();
+        }
+        
+        function startNewGame() {
+            secretNumber = Math.floor(Math.random() * difficulty) + 1;
+            guessCount = 0;
+            hintsUsed = 0;
+            updateStats();
+            
+            const resultArea = document.getElementById('result');
+            resultArea.innerText = `New game started! I'm thinking of a new number between 1 and ${difficulty}!`;
+            resultArea.className = "";
+            
+            speak(`New game! I'm thinking of a secret number between 1 and ${difficulty}. Can you guess it?`);
+            
+            document.getElementById('guess').value = '';
+            document.getElementById('guess').focus();
+            
+            console.log("New secret number is: " + secretNumber);
+        }
+        
+        // AUDIO CONTROL FUNCTIONS
+        function testAudio() {
+            speak("Hello! This is your Number Detective game. Audio is working perfectly!");
+        }
+        
+        function toggleMute() {
+            audioEnabled = !audioEnabled;
+            const button = document.getElementById('muteToggle');
+            button.innerText = audioEnabled ? "🔇 Mute" : "🔊 Unmute";
+            
+            if (audioEnabled) {
+                speak("Audio turned on!");
+            }
+        }
+        
+        function updateSpeechRate() {
+            speechRate = document.getElementById('speechRate').value;
+            speak("Speech speed is now set to " + Math.round(speechRate * 100) + " percent");
+        }
+        
+        // EVENT LISTENERS
+        document.getElementById('submitGuess').addEventListener('click', checkGuess);
+        document.getElementById('newGame').addEventListener('click', startNewGame);
+        document.getElementById('giveHint').addEventListener('click', giveHint);
+        document.getElementById('testAudio').addEventListener('click', testAudio);
+        document.getElementById('muteToggle').addEventListener('click', toggleMute);
+        document.getElementById('speechRate').addEventListener('change', updateSpeechRate);
+        
+        // Keyboard events
+        document.getElementById('guess').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                checkGuess();
+            }
+        });
+        
+        // Global keyboard shortcuts
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'n' && (event.ctrlKey || event.metaKey)) {
+                event.preventDefault();
+                startNewGame();
+            }
+            if (event.key === 'm' && (event.ctrlKey || event.metaKey)) {
+                event.preventDefault();
+                toggleMute();
+            }
+            if (event.key === 'h' && (event.ctrlKey || event.metaKey)) {
+                event.preventDefault();
+                giveHint();
+            }
+        });
+        
+        // Initialize the game
+        updateStats();
+        updateDifficultyDisplay();
+        updateGameHistory();
+        document.getElementById('guess').focus();
+        
+        // Welcome message
+        setTimeout(() => {
+            speak("Welcome to Number Detective! I'm thinking of a secret number between 1 and 10. Enter your guess and press the button. Good luck, detective!");
+        }, 1000);
+    </script>
+    
+</body>
+</html>
